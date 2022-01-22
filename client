@@ -1,0 +1,25 @@
+import socket
+
+
+SERVER = '192.168.1.104'
+HEADER = 64
+PORT = 1234
+FORMAT = 'utf-8'
+DISCONNECT_MESSAGE = "!DISCO"
+buffer_size = 1024
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+addr = (SERVER,PORT)
+client.connect(addr)
+text = "Hello, World!"
+
+def send(msg):
+    message = msg.encode(FORMAT)
+    msg_length=len(message)
+    send_length = str(msg_length).encode(FORMAT)
+    send_length += b' '*(HEADER-len(send_length))
+    client.send(send_length)
+    client.send(message)
+    print(client.recv(2048).decode(FORMAT))
+
+send(text)
+send(DISCONNECT_MESSAGE)
